@@ -48,7 +48,7 @@ CREATE TABLE Delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
     size INT,
     cost DECIMAL(10, 2) NOT NULL,
-    estimated_date INT ,
+    estimated_date INT
 );
 
 
@@ -68,7 +68,7 @@ CREATE TABLE Payments (
 CREATE TABLE Coupons (
     coupon_id INT AUTO_INCREMENT PRIMARY KEY,
     coupon_code VARCHAR(255) UNIQUE NOT NULL,
-    discount_amount DECIMAL(10, 2) NOT NULL,
+    discount_amount DECIMAL(10, 2) NOT NULL
 );
 
 
@@ -89,7 +89,7 @@ CREATE TABLE Products (
     size VARCHAR(10) , 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id),
     FOREIGN KEY (distributor_id) REFERENCES Distributors(distributor_id)
 );
 
@@ -104,7 +104,7 @@ CREATE TABLE Distributors (
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(255) NOT NULL ,
-    description TEXT,
+    description TEXT
 );
 
 
@@ -126,14 +126,13 @@ CREATE TABLE Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT, 
     delivery_id INT,
-    payment_id INT,
     coupon_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
-    FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id),
     FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
 );
 
