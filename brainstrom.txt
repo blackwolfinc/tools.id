@@ -1,0 +1,22 @@
+MVP Requirements for an Online Web Shop CLI
+
+1. User Authentication and Authorization
+Sign Up: Allow users to register with email and password.
+Login: Allow users to log in with their credentials.
+User Roles: Define roles (e.g., Admin, Customer) with different permissions.
+
+2. Product Management
+Add Products: Admins can add new products with details like name, description, and price.
+Edit Products: Admins can edit product details.
+Delete Products: Admins can delete products.
+
+3. Order Management
+Create Orders: Customers can place orders for products.
+View Orders: Admins and customers can view order details.
+Order Status: Track the status of each order (e.g., Processing, Shipped, Delivered).
+
+4. Payment Integration
+Payment Gateway: Simulate payment transactions.
+
+5. Basic CLI Commands
+Implement commands to handle user registration, login, product management, order placement, and payment processing.

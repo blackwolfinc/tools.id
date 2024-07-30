@@ -1,0 +1,96 @@
+
+EXAMPLE FOR FOLDER STRUCTURE
+
+app/
+├── cmd/
+│   └── myshop/
+│       └── main.go
+├── config/
+│   └── config.yaml
+├── entity/
+│   ├── user.go
+│   ├── product.go
+│   └── order.go
+├── handler/
+│   ├── auth_handler.go
+│   ├── orders_handler.go
+│   └── products_handler.go
+├── internal/
+│   ├── auth/
+│   │   ├── auth.go
+│   │   └── auth_test.go
+│   ├── orders/
+│   │   ├── orders.go
+│   │   └── orders_test.go
+│   ├── products/
+│   │   ├── products.go
+│   │   └── products_test.go
+│   └── users/
+│       ├── users.go
+│       └── users_test.go
+├── pkg/
+│   ├── models/
+│   │   ├── user.go
+│   │   ├── product.go
+│   │   └── order.go
+│   └── utils/
+│       ├── hash.go
+│       └── hash_test.go
+├── scripts/
+│   └── setup.sh
+├── .env
+├── .gitignore
+├── go.mod
+├── go.sum
+├── README.md
+└── brainstorm.txt
+
+
+Explanation of Changes and Additions
+cmd/myshop/main.go
+
+Purpose: Entry point of the application, centralizing the main logic.
+config/config.yaml
+
+Purpose: Centralized configuration file for the application.
+entity/
+
+Purpose: Contains data models for users, products, and orders.
+Usage: Replace the contents of pkg/models with entity to align with your existing structure.
+handler/
+
+Purpose: Contains HTTP handlers or CLI handlers for different functionalities like authentication, orders, and products.
+Usage: Handlers will interface with the internal packages to handle user requests.
+internal/
+
+Purpose: Contains core application logic and business rules, enforcing encapsulation.
+Subdirectories:
+auth/: Handles authentication logic.
+orders/: Manages order-related operations.
+products/: Manages product-related operations.
+users/: Handles user management.
+pkg/
+
+Purpose: Contains reusable packages that can be used across different parts of the application or other projects.
+Subdirectories:
+utils/: Utility functions, such as hashing.
+scripts/
+
+Purpose: Contains automation scripts for setting up or maintaining the project.
+Example: setup.sh for setting up the project environment.
+.env
+
+Purpose: Environment variables configuration file.
+brainstorm.txt
+
+Purpose: Placeholder for brainstorming and miscellaneous notes.
+.gitignore
+
+Purpose: Specifies files and directories to be ignored by Git.
+go.mod & go.sum
+
+Purpose: Dependency management files.
+README.md
+
+Purpose: Project documentation.
+
