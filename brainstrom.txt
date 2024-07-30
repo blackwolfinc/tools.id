@@ -15,9 +15,14 @@ Delete Products: Admins can delete products.
 id Category , 
 
 
-kain 01
-mesin 02
-kimia 03
+1. Machinery
+2. Tools
+3. Materials
+4. Chemicals
+5. Electrical Components
+6. Industrial Supplies
+7. Packaging and Storage
+8. Automation and Robotics
 
 
 2.3  distributor 
