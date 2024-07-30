@@ -1,4 +1,37 @@
--- User Authentication and Authorization
+-- B2C from  Distributor to Customer
+
+
+-- ===================================================================================================
+-- Bundle 1 bagas
+-- ===================================================================================================
+-- Login Page & sign up
+
+-- admin - fitur curd 
+-- master Distributors (full)
+-- master Delivery
+-- master Payments
+-- master Coupons
+-- master Categories
+
+-- Distributor
+-- master Products 
+-- master Distributors (update)
+-- input porduk yang akan di jual , berdasarkan  kategory yang sudah di buat oleh admin
+
+-- Customer
+-- Belanja
+-- Login
+-- pilih kategory
+-- pilih porduk 
+-- pilih delivery 
+-- pilih pembayaran 
+-- input kupon (optional)
+-- bayar
+-- recipt & shiping estimate
+
+
+
+-- User Authentication and Authorization (ACC) 
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -8,25 +41,58 @@ CREATE TABLE Users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Product Management
+
+-- Delivery  (ACC)
+-- estimated_date 1 = 1 hari
+CREATE TABLE Delivery (
+    delivery_id INT AUTO_INCREMENT PRIMARY KEY,
+    size INT,
+    cost DECIMAL(10, 2) NOT NULL,
+    estimated_date INT ,
+);
+
+
+-- Payment Integration  (ACC)
+CREATE TABLE Payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+
+
+-- Discount/Coupon Management (ACC)
+-- diskon persen 
+CREATE TABLE Coupons (
+    coupon_id INT AUTO_INCREMENT PRIMARY KEY,
+    coupon_code VARCHAR(255) UNIQUE NOT NULL,
+    discount_amount DECIMAL(10, 2) NOT NULL,
+);
+
+
+-- ===================================================================================================
+-- Bundle 2 kamal
+-- ===================================================================================================
+
+-- Product Management (ACC)
+-- size small | medium | Large
 CREATE TABLE Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     category_id INT,
+    distributor_id INT,
+    stock INT , 
+    size VARCHAR(10) , 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+    FOREIGN KEY (distributor_id) REFERENCES Distributors(distributor_id)
 );
 
--- Categories
-CREATE TABLE Categories (
-    category_id INT AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(255) NOT NULL
-);
-
--- Distributor Information
 CREATE TABLE Distributors (
     distributor_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -34,43 +100,59 @@ CREATE TABLE Distributors (
     phone_number VARCHAR(20)
 );
 
--- Order Management (Transaksi)
-CREATE TABLE Orders (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
-    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+-- Categories (ACC)
+CREATE TABLE Categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(255) NOT NULL ,
+    description TEXT,
 );
 
--- Detail Order (Transaksi)
+
+
+-- ===================================================================================================
+-- Bundle 3 marcel 
+-- ===================================================================================================
+
+-- Order Management (Transaksi)  (ACC)
+
+-- s 2 = medium
+-- s 3 = large
+-- m 2 = lagre
+
+-- bisa mempunyai banyak product dalam sekali beli 
+-- maximal 3 item yang berbeda
+-- total_amount = total dari harga order detail per produk
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT, 
+    delivery_id INT,
+    payment_id INT,
+    coupon_id INT,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
+    payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id)
+    FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
+);
+
+
+-- Detail Order (Transaksi) (ACC)
+-- total_price = total dari harga produk di kali qty
 CREATE TABLE OrderDetails (
     order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     product_id INT,
     quantity INT NOT NULL,
-    unit_price DECIMAL(10, 2) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
--- Payment Integration
-CREATE TABLE Payments (
-    payment_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
-    payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-);
 
--- Discount/Coupon Management
-CREATE TABLE Coupons (
-    coupon_id INT AUTO_INCREMENT PRIMARY KEY,
-    coupon_code VARCHAR(255) UNIQUE NOT NULL,
-    discount_amount DECIMAL(10, 2) NOT NULL,
-    expiration_date DATE NOT NULL
-);
+
+
+
+
+
