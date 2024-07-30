@@ -10,13 +10,47 @@ Add Products: Admins can add new products with details like name, description, a
 Edit Products: Admins can edit product details.
 Delete Products: Admins can delete products.
 
-3. Order Management
+
+2.2 Category 
+id Category , 
+
+
+kain 01
+mesin 02
+kimia 03
+
+
+2.3  distributor 
+nama distributor 
+alamat 
+no telfon 
+
+
+3. Order Management (transaksi)
 Create Orders: Customers can place orders for products.
 View Orders: Admins and customers can view order details.
 Order Status: Track the status of each order (e.g., Processing, Shipped, Delivered).
 
+3.2 delivery status
+
+3.3 Detail Order  (transaksi)
+
 4. Payment Integration
 Payment Gateway: Simulate payment transactions.
+    - credit card / tunai / virtual account
 
-5. Basic CLI Commands
-Implement commands to handle user registration, login, product management, order placement, and payment processing.
+5. discount / by number 
+    - nomer cuppon dan potongan kupon 
+
+
+6. Report Order
+    - transaction history 
+    - transaction Revenue 
+    - transaction most Sales product 
+    - transaction most user Transaction  
+
+
+#Semua api harus ada CURD
+
+
+
