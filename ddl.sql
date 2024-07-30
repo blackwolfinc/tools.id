@@ -4,7 +4,7 @@ CREATE TABLE Users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     address TEXT NOT NULL,
-    role ENUM('Admin', 'Customer', 'Distributor', 'Driver') NOT NULL,
+    role ENUM('Admin', 'Customer', 'Distributor') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
