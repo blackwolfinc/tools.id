@@ -26,6 +26,6 @@ func main() {
 
 	fmt.Println("Successfully connected to the database!")
 
-	cli.RunApp()
+	cli.Order(db)
 
 }
