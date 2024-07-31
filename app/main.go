@@ -34,6 +34,7 @@ func main() {
 	fmt.Println("1. Sign Up")
 	fmt.Println("2. Log In")
 	fmt.Print("Choose an option: ")
+
 	fmt.Scanln(&choice)
 
 	switch choice {

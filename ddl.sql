@@ -8,7 +8,6 @@
 -- admin - fitur CRUD 
 -- master Distributors (full)
 -- master Delivery
--- master Payments
 -- master Coupons
 -- master Categories
 
@@ -41,9 +40,9 @@ CREATE TABLE Users (
 
 -- Delivery (ACC)
 -- estimated_date 1 = 1 hari
-CREATE TABLE DeliveryType (
+CREATE TABLE Delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
-    delivery_name VARCHAR(255)
+    name VARCHAR(255)
     size ENUM('S', 'M', 'L') NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,
     estimated_date INT NOT NULL
