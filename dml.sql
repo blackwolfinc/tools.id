@@ -44,17 +44,13 @@ INSERT INTO Users (email, password_hash, address, role) VALUES
 ('user10@example.com', 'hash10', 'Address 10', 'Admin');
 
 -- Delivery (ACC)
-INSERT INTO Delivery (size, cost, estimated_date) VALUES
-('S', 100.00, 1),
-('M', 150.00, 2),
-('L', 200.00, 3),
-('S', 250.00, 1),
-('M', 300.00, 2),
-('L', 350.00, 3),
-('S', 400.00, 1),
-('M', 450.00, 2),
-('L', 500.00, 3),
-('S', 550.00, 1);
+INSERT INTO Delivery (name, size, cost, delivery_days) VALUES
+('J&T', 'S', 100.00, 1),
+('J&T', 'M', 150.00, 2),
+('J&T', 'L', 200.00, 3),
+('JNE', 'S', 150.00, 1),
+('JNE', 'M', 200.00, 2),
+('JNE', 'L', 250.00, 3),
 
 -- Discount/Coupon Management (ACC)
 INSERT INTO Coupons (coupon_code, discount_amount) VALUES

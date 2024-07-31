@@ -45,7 +45,7 @@ CREATE TABLE Delivery (
     name VARCHAR(255)
     size ENUM('S', 'M', 'L') NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,
-    estimated_date INT NOT NULL
+    delivery_days INT NOT NULL
 );
 
 -- Discount/Coupon Management (ACC)
@@ -110,8 +110,8 @@ CREATE TABLE Orders (
     delivery_id INT,
     coupon_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
-    payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
+    status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL DEFAULT 'Processing',
+    payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL DEFAULT 'Pending',
     total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id),
