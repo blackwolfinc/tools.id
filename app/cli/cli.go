@@ -1,14 +1,21 @@
 package cli
 
-import "fmt"
+import (
+	"bufio"
+	"database/sql"
+	"fmt"
+	"os"
+	"strings"
+	"strconv"
+)
 
 // HandleUserRole function to handle user roles
-func HandleUserRole(role string) {
+func HandleUserRole(role string, db *sql.DB) {
 	switch role {
 	case "Admin":
 		adminCLI()
 	case "Customer":
-		customerCLI()
+		customerCLI(db)
 	case "Distributor":
 		distributorCLI()
 	default:
@@ -26,11 +33,21 @@ func adminCLI() {
 }
 
 // Customer CLI
-func customerCLI() {
+func customerCLI(db *sql.DB) {
 	fmt.Println("Customer CLI")
-	fmt.Println("1. View Products")
-	fmt.Println("2. Place Order")
-	fmt.Println("3. View Order Status")
+	fmt.Println("1. Place Order")
+	fmt.Println("2. View Order History")
+	reader := bufio.NewReader(os.Stdin)
+	choiceInp, _ := reader.ReadString('\n')
+	choiceInp = strings.TrimSpace(choiceInp)
+	choice, err := strconv.Atoi(choiceInp)
+	if err != nil || choice < 1 || choice > 2 {
+		fmt.Printf("Invalid input. Please enter a number between 1 to 2\n")
+		return
+	}
+	if choice == 1 {
+		Order(db)
+	}
 	// Add more customer options here
 }
 
