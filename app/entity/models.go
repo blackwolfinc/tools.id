@@ -1,8 +1,12 @@
 package entity
 
-type Staff struct {
-	ID       int
-	Name     string
-	Email    string
-	Position string
+import "time"
+
+type User struct {
+	ID        int
+	Email     string
+	Password  string
+	Address   string
+	Role      string
+	CreatedAt time.Time
 }
