@@ -7,15 +7,15 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 	"strconv"
+	"time"
 )
 
 func Login(cfg *config.Config, Password, Email string) []string {
 	db, err := sql.Open("mysql", cfg.DSN())
 	if err != nil {
 		fmt.Println("Error connecting to database:", err)
-		return []string {"", ""}
+		return []string{"", ""}
 	}
 	defer db.Close()
 
@@ -25,7 +25,7 @@ func Login(cfg *config.Config, Password, Email string) []string {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Invalid email or password.")
-			return []string {"", ""}
+			return []string{"", ""}
 		}
 		log.Fatalf("Failed to query user: %v", err)
 	}
@@ -33,12 +33,12 @@ func Login(cfg *config.Config, Password, Email string) []string {
 
 	if err != nil {
 		fmt.Println("Invalid email or password.")
-		return []string {"", ""}
+		return []string{"", ""}
 	}
 
 	fmt.Printf("Log in successful")
 	fmt.Printf("User Id: %s", strconv.Itoa(user.ID))
-	return []string {user.Role, strconv.Itoa(user.ID)}
+	return []string{user.Role, strconv.Itoa(user.ID)}
 }
 
 func Register(cfg *config.Config, email, passwordHash, address, role string) {

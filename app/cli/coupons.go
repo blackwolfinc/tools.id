@@ -9,10 +9,14 @@ import (
 
 func Coupons(cfg *config.Config) {
 	var choice int
-	fmt.Println("1. Add coupons")
-	fmt.Println("2. Edit coupons")
-	fmt.Println("3. Delete coupons")
+	fmt.Println("=======================================================================================")
+	fmt.Println("Coupons Menu")
+	fmt.Println("=======================================================================================")
+	fmt.Println("1. Add Coupons")
+	fmt.Println("2. Edit Coupons")
+	fmt.Println("3. Delete Coupons")
 	fmt.Println("0. Exit")
+	fmt.Println("=======================================================================================")
 	fmt.Scan(&choice)
 
 	switch choice {

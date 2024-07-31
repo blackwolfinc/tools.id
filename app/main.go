@@ -4,13 +4,13 @@ import (
 	"app/cli"
 	"app/config"
 	"app/handler"
+	"bufio"
 	"database/sql"
 	"fmt"
 	"log"
-	"strconv"
-	"bufio"
-	"strings"
 	"os"
+	"strconv"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -31,14 +31,16 @@ func main() {
 		log.Fatalf("Database is not reachable: %v", err)
 	}
 
-	fmt.Println("Database connection successful.")
-
 	var choice int
 	for {
-		fmt.Println("Welcome to the CLI program")
+		fmt.Println("=======================================================================================")
+		fmt.Println("Welcome to the tools.id")
+		fmt.Println("=======================================================================================")
 		fmt.Println("1. Sign Up")
 		fmt.Println("2. Log In")
-		fmt.Print("Choose an option: ")
+		fmt.Println("=======================================================================================")
+		fmt.Println("Choose an option: ")
+		fmt.Println("=================")
 
 		reader := bufio.NewReader(os.Stdin)
 		choiceInp, _ := reader.ReadString('\n')
@@ -48,9 +50,10 @@ func main() {
 			fmt.Println("Invalid input.")
 			continue
 		}
+		fmt.Println("=======================================================================================")
+
 		break
 	}
-
 
 	switch choice {
 	case 1:

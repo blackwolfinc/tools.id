@@ -9,10 +9,15 @@ import (
 
 func Distributor(cfg *config.Config) {
 	var choice int
+	fmt.Println("=======================================================================================")
+	fmt.Println("Distributor Menu")
+	fmt.Println("=======================================================================================")
 	fmt.Println("1. Add Distributor")
 	fmt.Println("2. Edit Distributor")
 	fmt.Println("3. Delete Distributor")
 	fmt.Println("0. Exit")
+	fmt.Println("=======================================================================================")
+
 	fmt.Scan(&choice)
 
 	switch choice {

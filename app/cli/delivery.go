@@ -9,10 +9,15 @@ import (
 
 func Delivery(cfg *config.Config) {
 	var choice int
-	fmt.Println("1. Add Product")
-	fmt.Println("2. Edit Product")
-	fmt.Println("3. Delete Product")
+	fmt.Println("=======================================================================================")
+	fmt.Println("Delivery Menu")
+	fmt.Println("=======================================================================================")
+	fmt.Println("1. Add Delivery")
+	fmt.Println("2. Edit Delivery")
+	fmt.Println("3. Delete Delivery")
 	fmt.Println("0. Exit")
+	fmt.Println("=======================================================================================")
+
 	fmt.Scan(&choice)
 
 	switch choice {

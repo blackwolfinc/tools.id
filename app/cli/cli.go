@@ -16,11 +16,16 @@ import (
 
 // Admin CLI
 func adminCLI(db *sql.DB, cfg *config.Config) {
-	fmt.Println("Admin CLI")
+	fmt.Println("=======================================================================================")
+	fmt.Println("Admin Menu")
+	fmt.Println("=======================================================================================")
 	fmt.Println("1. Manage Category")
 	fmt.Println("2. Manage Distributor")
 	fmt.Println("3. Manage Delivery")
 	fmt.Println("4. Manage Coupons")
+	fmt.Println("0. Exit")
+	fmt.Println("=======================================================================================")
+
 	// Add more admin options here
 
 	var choice int
@@ -71,9 +76,12 @@ func customerCLI(db *sql.DB, cfg *config.Config, userId int) {
 
 // Distributor CLI
 func distributorCLI(db *sql.DB, cfg *config.Config) {
-	fmt.Println("Distributor CLI")
+	fmt.Println("=======================================================================================")
+	fmt.Println("Distributor Menu")
+	fmt.Println("=======================================================================================")
 	fmt.Println("1. Add Products")
 	fmt.Println("2. View Orders")
+	fmt.Println("=======================================================================================")
 
 	var choice int
 	fmt.Scan(&choice)
@@ -82,7 +90,6 @@ func distributorCLI(db *sql.DB, cfg *config.Config) {
 	case 1:
 		Product(cfg)
 	case 2:
-
 	case 0:
 		os.Exit(0)
 	default:
