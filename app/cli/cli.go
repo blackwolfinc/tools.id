@@ -1,14 +1,17 @@
 package cli
 
-import "fmt"
+import (
+	"database/sql"
+	"fmt"
+)
 
 // HandleUserRole function to handle user roles
-func HandleUserRole(role string) {
+func HandleUserRole(role string, db *sql.DB) {
 	switch role {
 	case "Admin":
 		adminCLI()
 	case "Customer":
-		customerCLI()
+		customerCLI(db)
 	case "Distributor":
 		distributorCLI()
 	default:
@@ -26,11 +29,12 @@ func adminCLI() {
 }
 
 // Customer CLI
-func customerCLI() {
+func customerCLI(db *sql.DB) {
 	fmt.Println("Customer CLI")
 	fmt.Println("1. View Products")
 	fmt.Println("2. Place Order")
 	fmt.Println("3. View Order Status")
+	Order(db)
 	// Add more customer options here
 }
 

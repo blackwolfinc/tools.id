@@ -76,5 +76,5 @@ func Login(db *sql.DB) {
 	}
 
 	fmt.Printf("Log in successful")
-	cli.HandleUserRole(user.Role)
+	cli.HandleUserRole(user.Role, db)
 }
