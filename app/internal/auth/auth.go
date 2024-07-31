@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func Login(cfg *config.Config, Password, Email string) string {
+func Login(cfg *config.Config, Password, Email string) []string {
 	db, err := sql.Open("mysql", cfg.DSN())
 	if err != nil {
 		fmt.Println("Error connecting to database:", err)
-		return ""
+		return []string {"", ""}
 	}
 	defer db.Close()
 
@@ -24,7 +24,7 @@ func Login(cfg *config.Config, Password, Email string) string {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Invalid email or password.")
-			return ""
+			return []string {"", ""}
 		}
 		log.Fatalf("Failed to query user: %v", err)
 	}
@@ -32,11 +32,11 @@ func Login(cfg *config.Config, Password, Email string) string {
 
 	if err != nil {
 		fmt.Println("Invalid email or password.")
-		return ""
+		return []string {"", ""}
 	}
 
 	fmt.Printf("Log in successful")
-	return user.Role
+	return []string {user.Role, string(user.ID)}
 }
 
 func Register(cfg *config.Config, email, passwordHash, address, role string) {

@@ -43,18 +43,17 @@ func Register(db *sql.DB, cfg *config.Config) {
 	auth.Register(cfg, email, passwordHash, address, role)
 }
 
-func Login(db *sql.DB, cfg *config.Config) string {
+func Login(db *sql.DB, cfg *config.Config) []string {
 	var email, password string
 	fmt.Print("Enter email: ")
 	fmt.Scanln(&email)
 	fmt.Print("Enter password: ")
 	fmt.Scanln(&password)
-	var Role string
-	Role = auth.Login(cfg, password, email)
+	result := auth.Login(cfg, password, email)
 
-	if Role != "" {
-		return Role
+	if result[0] != "" {
+		return []string{result[0], result[1]}
 	} else {
-		return ""
+		return []string{"", ""}
 	}
 }

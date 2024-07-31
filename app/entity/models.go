@@ -34,3 +34,10 @@ type Distributor struct {
 	Address string
 	Phone   string
 }
+
+type Order struct {
+	ID      int
+	Name    string
+	Address string
+	Phone   string
+}

@@ -47,7 +47,7 @@ func adminCLI(db *sql.DB, cfg *config.Config) {
 // ========================================================================
 
 // Customer CLI
-func customerCLI(db *sql.DB, cfg *config.Config) {
+func customerCLI(db *sql.DB, cfg *config.Config, userId int) {
 	fmt.Println("Customer CLI")
 	fmt.Println("1. Place Order")
 	fmt.Println("2. View Order History")
@@ -60,7 +60,7 @@ func customerCLI(db *sql.DB, cfg *config.Config) {
 		return
 	}
 	if choice == 1 {
-		Order(db)
+		Order(db, userId)
 	}
 	// Add more customer options here
 }
