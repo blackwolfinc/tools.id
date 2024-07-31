@@ -18,8 +18,9 @@ import (
 func adminCLI(db *sql.DB, cfg *config.Config) {
 	fmt.Println("Admin CLI")
 	fmt.Println("1. Manage Category")
-	fmt.Println("2. Manage Products")
-	fmt.Println("3. Manage Distributor")
+	fmt.Println("2. Manage Distributor")
+	fmt.Println("3. Manage Delivery")
+	fmt.Println("4. Manage Coupons")
 	// Add more admin options here
 
 	var choice int
@@ -29,9 +30,11 @@ func adminCLI(db *sql.DB, cfg *config.Config) {
 	case 1:
 		Categories(cfg)
 	case 2:
-		Product(cfg)
-	case 3:
 		Distributor(cfg)
+	case 3:
+		Delivery(cfg)
+	case 4:
+		Coupons(cfg)
 	case 0:
 		os.Exit(0)
 	default:
@@ -71,5 +74,18 @@ func distributorCLI(db *sql.DB, cfg *config.Config) {
 	fmt.Println("Distributor CLI")
 	fmt.Println("1. Add Products")
 	fmt.Println("2. View Orders")
-	// Add more distributor options here
+
+	var choice int
+	fmt.Scan(&choice)
+
+	switch choice {
+	case 1:
+		Product(cfg)
+	case 2:
+
+	case 0:
+		os.Exit(0)
+	default:
+		fmt.Println("Invalid choice. Please try again.")
+	}
 }
