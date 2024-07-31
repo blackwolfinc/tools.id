@@ -8,7 +8,6 @@
 -- admin - fitur CRUD 
 -- master Distributors (full)
 -- master Delivery
--- master Payments
 -- master Coupons
 -- master Categories
 
@@ -43,19 +42,10 @@ CREATE TABLE Users (
 -- estimated_date 1 = 1 hari
 CREATE TABLE Delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
     size ENUM('S', 'M', 'L') NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,
     estimated_date INT NOT NULL
-);
-
--- Payment Integration (ACC)
-CREATE TABLE Payments (
-    payment_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 -- Discount/Coupon Management (ACC)
@@ -139,4 +129,15 @@ CREATE TABLE OrderDetails (
     total_price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+
+-- Payment Integration (ACC)
+CREATE TABLE Payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
