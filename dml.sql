@@ -44,30 +44,30 @@ INSERT INTO Users (email, password_hash, address, role) VALUES
 ('user10@example.com', 'hash10', 'Address 10', 'Admin');
 
 -- Delivery (ACC)
-INSERT INTO Delivery (size, cost, estimated_date) VALUES
-('S', 100.00, 1),
-('M', 150.00, 2),
-('L', 200.00, 3),
-('S', 250.00, 1),
-('M', 300.00, 2),
-('L', 350.00, 3),
-('S', 400.00, 1),
-('M', 450.00, 2),
-('L', 500.00, 3),
-('S', 550.00, 1);
+INSERT INTO Delivery (order_id, size, cost, estimated_date) VALUES
+(1, 'S', 100.00, 1),
+(2, 'M', 150.00, 2),
+(3, 'L', 200.00, 3),
+(4, 'S', 250.00, 1),
+(5, 'M', 300.00, 2),
+(6, 'L', 350.00, 3),
+(7, 'S', 400.00, 1),
+(8, 'M', 450.00, 2),
+(9, 'L', 500.00, 3),
+(10, 'S', 550.00, 1);
 
 -- Discount/Coupon Management (ACC)
-INSERT INTO Coupons (coupon_code, discount_amount) VALUES
-('COUPON1', 10.00),
-('COUPON2', 15.00),
-('COUPON3', 20.00),
-('COUPON4', 25.00),
-('COUPON5', 30.00),
-('COUPON6', 35.00),
-('COUPON7', 40.00),
-('COUPON8', 45.00),
-('COUPON9', 50.00),
-('COUPON10', 55.00);
+INSERT INTO Coupons (order_id, coupon_code, discount_amount) VALUES
+(1, 'COUPON1', 10.00),
+(2, 'COUPON2', 15.00),
+(3, 'COUPON3', 20.00),
+(4, 'COUPON4', 25.00),
+(5, 'COUPON5', 30.00),
+(6, 'COUPON6', 35.00),
+(7, 'COUPON7', 40.00),
+(8, 'COUPON8', 45.00),
+(9, 'COUPON9', 50.00),
+(10, 'COUPON10', 55.00);
 
 -- Products (ACC)
 -- Assuming Categories and Distributors tables already have records with category_id from 1 to 3 and distributor_id from 1 to 3
@@ -91,17 +91,17 @@ INSERT INTO Products (name, description, price, category_id, distributor_id, sto
 
 -- Order Management (Transaksi) (ACC)
 -- Assuming Users, Delivery, Coupons tables already have records
-INSERT INTO Orders (user_id, delivery_id, coupon_id, status, payment_status, total_amount) VALUES
-(1, 1, 1, 'Processing', 'Pending', 100.00),
-(2, 2, 2, 'Shipped', 'Completed', 150.00),
-(3, 3, 3, 'Delivered', 'Failed', 200.00),
-(4, 4, 4, 'Cancelled', 'Pending', 250.00),
-(5, 5, 5, 'Processing', 'Completed', 300.00),
-(6, 6, 6, 'Shipped', 'Failed', 350.00),
-(7, 7, 7, 'Delivered', 'Pending', 400.00),
-(8, 8, 8, 'Cancelled', 'Completed', 450.00),
-(9, 9, 9, 'Processing', 'Failed', 500.00),
-(10, 10, 10, 'Shipped', 'Pending', 550.00);
+INSERT INTO Orders (user_id, status, payment_status, total_amount) VALUES
+(1, 'Processing', 'Pending', 100.00),
+(2, 'Shipped', 'Completed', 150.00),
+(3, 'Delivered', 'Failed', 200.00),
+(4, 'Cancelled', 'Pending', 250.00),
+(5, 'Processing', 'Completed', 300.00),
+(6, 'Shipped', 'Failed', 350.00),
+(7, 'Delivered', 'Pending', 400.00),
+(8, 'Cancelled', 'Completed', 450.00),
+(9, 'Processing', 'Failed', 500.00),
+(10, 'Shipped', 'Pending', 550.00);
 
 -- Payment Integration (ACC)
 -- Assuming Orders table already has 10 records with order_id from 1 to 10

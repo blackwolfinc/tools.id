@@ -43,9 +43,11 @@ CREATE TABLE Users (
 -- estimated_date 1 = 1 hari
 CREATE TABLE Delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
     size ENUM('S', 'M', 'L') NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,
-    estimated_date INT NOT NULL
+    estimated_date INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 -- Payment Integration (ACC)
@@ -62,8 +64,10 @@ CREATE TABLE Payments (
 -- diskon persen 
 CREATE TABLE Coupons (
     coupon_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
     coupon_code VARCHAR(255) UNIQUE NOT NULL,
-    discount_amount DECIMAL(10, 2) NOT NULL
+    discount_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 -- ===================================================================================================
@@ -117,16 +121,11 @@ CREATE TABLE Categories (
 CREATE TABLE Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT, 
-    delivery_id INT,
-    payment_id INT,
-    coupon_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id),
-    FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
 );
 
 -- Detail Order (Transaksi) (ACC)

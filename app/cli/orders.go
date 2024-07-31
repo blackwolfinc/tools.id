@@ -110,7 +110,6 @@ func Order(db *sql.DB) {
 
 	rows.Close()
 
-// -- pilih delivery 
 // -- pilih pembayaran 
 // -- input kupon (optional)
 // -- bayar
