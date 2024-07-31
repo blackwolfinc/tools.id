@@ -108,12 +108,11 @@ CREATE TABLE Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT, 
     delivery_id INT,
-    payment_id INT,
     coupon_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id),
     FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
