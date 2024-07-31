@@ -125,7 +125,7 @@ CREATE TABLE OrderDetails (
     order_id INT,
     product_id INT,
     quantity INT NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL DEFAULT 0,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
