@@ -17,15 +17,15 @@ func Order(db *sql.DB, user_id int) {
 	reader := bufio.NewReader(os.Stdin)
 	now := time.Now()
 
-    // Format the time for SQL TIMESTAMP insertion
-    formattedTime := now.Format("2006-01-02 15:04:05")
+	// Format the time for SQL TIMESTAMP insertion
+	formattedTime := now.Format("2006-01-02 15:04:05")
 
-    // Example query to insert into a table
-    query := "INSERT INTO Orders (user_id, order_date) VALUES (?, ?);"
-    _, err := db.Exec(query, user_id, formattedTime)
-    if err != nil {
-        log.Fatal(err)
-    }
+	// Example query to insert into a table
+	query := "INSERT INTO Orders (user_id, order_date) VALUES (?, ?);"
+	_, err := db.Exec(query, user_id, formattedTime)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	query = "SELECT order_id FROM Orders WHERE user_id = ? AND order_date = ?;"
 	rows, err := db.Query(query, user_id, formattedTime)
@@ -70,12 +70,12 @@ func Order(db *sql.DB, user_id int) {
 		for i, c := range categories {
 			fmt.Printf("%d. %s, Description: %s\n", i+1, c.Name, c.Description)
 		}
-	
+
 		length := len(categories)
 		var choice int
 		for {
 			fmt.Printf("Please enter a number between 1 to %d: ", length)
-			
+
 			choiceInp, _ := reader.ReadString('\n')
 			choiceInp = strings.TrimSpace(choiceInp)
 			choice, err = strconv.Atoi(choiceInp)
@@ -129,7 +129,7 @@ func Order(db *sql.DB, user_id int) {
 			}
 			break
 		}
-		
+
 		var quantity int
 		for {
 			fmt.Printf("Please enter a quantity: ")
@@ -166,8 +166,15 @@ func Order(db *sql.DB, user_id int) {
 			break
 		}
 	}
+	fmt.Println()
+	fmt.Println("=======================================================================================")
 	fmt.Println("Here are a list of your orders")
-	for i, order := range(orders) {
-		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i + 1, order.ProductName, order.Quantity, order.TotalPrice)
+	for i, order := range orders {
+		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
 	}
+
+	// checkout
+	fmt.Println()
+	fmt.Println("=======================================================================================")
+	fmt.Println("Choose a delivery method")
 }
