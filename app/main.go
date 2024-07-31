@@ -39,6 +39,7 @@ func main() {
 		fmt.Println("1. Sign Up")
 		fmt.Println("2. Log In")
 		fmt.Print("Choose an option: ")
+
 		reader := bufio.NewReader(os.Stdin)
 		choiceInp, _ := reader.ReadString('\n')
 		choiceInp = strings.TrimSpace(choiceInp)

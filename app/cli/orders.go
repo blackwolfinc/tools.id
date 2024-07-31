@@ -21,11 +21,24 @@ func Order(db *sql.DB, user_id int) {
     formattedTime := now.Format("2006-01-02 15:04:05")
 
     // Example query to insert into a table
-    query := "INSERT INTO Orders (user_id, order_date) VALUES (?, ?)"
+    query := "INSERT INTO Orders (user_id, order_date) VALUES (?, ?);"
     _, err := db.Exec(query, user_id, formattedTime)
     if err != nil {
         log.Fatal(err)
     }
+
+	query = "SELECT order_id FROM Orders WHERE user_id = ? AND order_date = ?;"
+	rows, err := db.Query(query, user_id, formattedTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var orderID int
+	for rows.Next() {
+		err := rows.Scan(&orderID)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	// list category
 	catQuery := "SELECT category_name, description FROM Categories"
 	catRows, err := db.Query(catQuery)
@@ -47,6 +60,9 @@ func Order(db *sql.DB, user_id int) {
 	}
 
 	defer catRows.Close()
+
+	orders := make([]*entity.OrderDetail, 0)
+
 	// cli
 	for {
 		fmt.Println("=======================================================================================")
@@ -71,7 +87,7 @@ func Order(db *sql.DB, user_id int) {
 		}
 
 		// list produk
-		productQuery := "SELECT p.name, p.description, p.price, d.distributor_id, p.size FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
+		productQuery := "SELECT p.product_id, p.name, p.description, p.price, d.distributor_id, p.size FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
 		productRows, err := db.Query(productQuery, choice)
 		if err != nil {
 			log.Fatal(err)
@@ -80,7 +96,7 @@ func Order(db *sql.DB, user_id int) {
 		products := make([]*entity.Product, 0)
 		for productRows.Next() {
 			item := new(entity.Product)
-			err := productRows.Scan(&item.Name, &item.Description, &item.Price, &item.DistributorID, &item.Size)
+			err := productRows.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.DistributorID, &item.Size)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -133,8 +149,25 @@ func Order(db *sql.DB, user_id int) {
 		fmt.Print("Would you like to make another order? (y/n) ")
 		again, _ := reader.ReadString('\n')
 		again = strings.TrimSpace(again)
+		order := new(entity.OrderDetail)
+		order.OrderID = orderID
+		order.ProductID = products[choice-1].ID
+		order.ProductName = products[choice-1].Name
+		order.Quantity = quantity
+		order.TotalPrice = products[choice-1].Price * float64(quantity)
+
+		query := "INSERT INTO OrderDetails (order_id, product_id, quantity, total_price) VALUES (?, ?, ?, ?)"
+		_, err = db.Exec(query, orderID, order.ProductID, quantity, order.TotalPrice)
+		if err != nil {
+			log.Fatal(err)
+		}
+		orders = append(orders, order)
 		if again == "n" {
 			break
 		}
+	}
+	fmt.Println("Here are a list of your orders")
+	for i, order := range(orders) {
+		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i + 1, order.ProductName, order.Quantity, order.TotalPrice)
 	}
 }

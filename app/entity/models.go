@@ -35,9 +35,11 @@ type Distributor struct {
 	Phone   string
 }
 
-type Order struct {
+type OrderDetail struct {
 	ID      int
-	Name    string
-	Address string
-	Phone   string
+	OrderID int
+	ProductID int
+	ProductName   string
+	Quantity int
+	TotalPrice  float64
 }
