@@ -166,8 +166,15 @@ func Order(db *sql.DB, user_id int) {
 			break
 		}
 	}
+	fmt.Println()
+	fmt.Println("=======================================================================================")
 	fmt.Println("Here are a list of your orders")
 	for i, order := range(orders) {
 		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i + 1, order.ProductName, order.Quantity, order.TotalPrice)
 	}
+
+	// checkout
+	fmt.Println()
+	fmt.Println("=======================================================================================")
+	fmt.Println("Choose a delivery method")
 }
