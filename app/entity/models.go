@@ -1,10 +1,14 @@
 package entity
 
-type Staff struct {
-	ID       int
-	Name     string
-	Email    string
-	Position string
+import "time"
+
+type User struct {
+	ID        int
+	Email     string
+	Password  string
+	Address   string
+	Role      string
+	CreatedAt time.Time
 }
 
 type Product struct {
@@ -12,13 +16,16 @@ type Product struct {
 	Name          string
 	Description   string
 	Price         float64
-	CategoryID    int
 	DistributorID int
+	CategoryID    int
+	Stock         int
+	Size          string
 }
 
 type Category struct {
-	ID   int
-	Name string
+	ID          int
+	Name        string
+	Description string
 }
 
 type Distributor struct {

@@ -6,6 +6,10 @@ import (
 	"fmt"
 )
 
+type ProductInterface interface {
+	AddProduct(name, description string, price float64, categoryID, distributorID int) error
+}
+
 func AddProduct(cfg *config.Config) {
 	var name, description string
 	var price float64

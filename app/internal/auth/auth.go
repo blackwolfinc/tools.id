@@ -1,8 +1,63 @@
 package auth
 
-import "fmt"
+import (
+	"app/config"
+	"app/pkg/models"
+	"app/pkg/utils"
+	"database/sql"
+	"fmt"
+	"log"
+	"time"
+)
 
-func HashPassword(password string) string {
-	// Password hashing logic
-	return fmt.Sprintf("hashed_%s", password)
+func Login(cfg *config.Config, Password, Email string) string {
+	db, err := sql.Open("mysql", cfg.DSN())
+	if err != nil {
+		fmt.Println("Error connecting to database:", err)
+		return ""
+	}
+	defer db.Close()
+
+	var user models.User
+
+	err = db.QueryRow("SELECT user_id, email, password_hash, role  FROM Users WHERE email = ?", Email).Scan(&user.ID, &user.Email, &user.Password, &user.Role)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("Invalid email or password.")
+			return ""
+		}
+		log.Fatalf("Failed to query user: %v", err)
+	}
+	err = utils.CheckPasswordHash(user.Password, Password)
+
+	if err != nil {
+		fmt.Println("Invalid email or password.")
+		return ""
+	}
+
+	fmt.Printf("Log in successful")
+	return user.Role
+}
+
+func Register(cfg *config.Config, email, passwordHash, address, role string) {
+
+	db, err := sql.Open("mysql", cfg.DSN())
+	if err != nil {
+		fmt.Println("Error connecting to database:", err)
+		return
+	}
+	defer db.Close()
+
+	_, err = db.Exec("INSERT INTO Users (email, password_hash, address, role, created_at) VALUES (?, ?, ?, ?, ?)", email, passwordHash, address, role, time.Now())
+	if err != nil {
+		log.Fatalf("Failed to insert user: %v", err)
+	}
+
+	fmt.Println("Sign up successful. Please log in.")
+	if err != nil {
+		fmt.Println("Invalid email or password.")
+		return
+	}
+
+	Login(cfg, passwordHash, email)
 }
