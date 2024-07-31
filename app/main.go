@@ -51,6 +51,7 @@ func main() {
 		break
 	}
 
+
 	switch choice {
 	case 1:
 		handler.Register(db, cfg)

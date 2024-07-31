@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"strconv"
 )
 
 func Login(cfg *config.Config, Password, Email string) []string {
@@ -36,7 +37,8 @@ func Login(cfg *config.Config, Password, Email string) []string {
 	}
 
 	fmt.Printf("Log in successful")
-	return []string {user.Role, string(user.ID)}
+	fmt.Printf("User Id: %s", strconv.Itoa(user.ID))
+	return []string {user.Role, strconv.Itoa(user.ID)}
 }
 
 func Register(cfg *config.Config, email, passwordHash, address, role string) {
