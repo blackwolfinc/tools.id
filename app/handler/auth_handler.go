@@ -1,16 +1,15 @@
 package handler
 
 import (
-	"app/cli"
-	"app/pkg/models"
+	"app/config"
+	"app/internal/auth"
 	"app/pkg/utils"
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 )
 
-func Register(db *sql.DB) {
+func Register(db *sql.DB, cfg *config.Config) {
 	var email, password, address, role string
 	fmt.Print("Enter email: ")
 	fmt.Scanln(&email)
@@ -41,40 +40,21 @@ func Register(db *sql.DB) {
 	if err != nil {
 		log.Fatalf("Failed to hash password: %v", err)
 	}
-
-	_, err = db.Exec("INSERT INTO Users (email, password_hash, address, role, created_at) VALUES (?, ?, ?, ?, ?)", email, passwordHash, address, role, time.Now())
-	if err != nil {
-		log.Fatalf("Failed to insert user: %v", err)
-	}
-
-	fmt.Println("Sign up successful. Please log in.")
-	Login(db)
+	auth.Register(cfg, email, passwordHash, address, role)
 }
 
-func Login(db *sql.DB) {
+func Login(db *sql.DB, cfg *config.Config) string {
 	var email, password string
 	fmt.Print("Enter email: ")
 	fmt.Scanln(&email)
 	fmt.Print("Enter password: ")
 	fmt.Scanln(&password)
+	var Role string
+	Role = auth.Login(cfg, password, email)
 
-	var user models.User
-	err := db.QueryRow("SELECT user_id, email, password_hash, role  FROM Users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Password, &user.Role)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			fmt.Println("Invalid email or password.")
-			return
-		}
-		log.Fatalf("Failed to query user: %v", err)
+	if Role != "" {
+		return Role
+	} else {
+		return ""
 	}
-
-	err = utils.CheckPasswordHash(user.Password, password)
-
-	if err != nil {
-		fmt.Println("Invalid email or password.")
-		return
-	}
-
-	fmt.Printf("Log in successful")
-	cli.HandleUserRole(user.Role, db)
 }

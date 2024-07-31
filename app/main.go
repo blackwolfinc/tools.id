@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/cli"
 	"app/config"
 	"app/handler"
 	"database/sql"
@@ -23,10 +24,10 @@ func main() {
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatalf("Failed to ping the database: %v", err)
+		log.Fatalf("Database is not reachable: %v", err)
 	}
 
-	fmt.Println("Successfully connected to the database!")
+	fmt.Println("Database connection successful.")
 
 	var choice int
 	fmt.Println("Welcome to the CLI program")
@@ -37,9 +38,12 @@ func main() {
 
 	switch choice {
 	case 1:
-		handler.Register(db)
+		handler.Register(db, cfg)
 	case 2:
-		handler.Login(db)
+		var Role = handler.Login(db, cfg)
+		if Role != "" {
+			cli.HandleUserRole(Role, db, cfg)
+		}
 	default:
 		fmt.Println("Invalid choice")
 	}

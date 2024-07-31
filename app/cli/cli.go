@@ -1,39 +1,50 @@
 package cli
 
 import (
+	"app/config"
 	"bufio"
 	"database/sql"
 	"fmt"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
-// HandleUserRole function to handle user roles
-func HandleUserRole(role string, db *sql.DB) {
-	switch role {
-	case "Admin":
-		adminCLI()
-	case "Customer":
-		customerCLI(db)
-	case "Distributor":
-		distributorCLI()
+// ========================================================================
+// Admin Menu
+// ========================================================================
+
+// Admin CLI
+func adminCLI(db *sql.DB, cfg *config.Config) {
+	fmt.Println("Admin CLI")
+	fmt.Println("1. Manage Category")
+	fmt.Println("2. Manage Products")
+	fmt.Println("3. Manage Distributor")
+	// Add more admin options here
+
+	var choice int
+	fmt.Scan(&choice)
+
+	switch choice {
+	case 1:
+		Categories(cfg)
+	case 2:
+		Product(cfg)
+	case 3:
+		Distributor(cfg)
+	case 0:
+		os.Exit(0)
 	default:
-		fmt.Println("Unknown role")
+		fmt.Println("Invalid choice. Please try again.")
 	}
 }
 
-// Admin CLI
-func adminCLI() {
-	fmt.Println("Admin CLI")
-	fmt.Println("1. Manage Users")
-	fmt.Println("2. Manage Products")
-	fmt.Println("3. Manage Orders")
-	// Add more admin options here
-}
+// ========================================================================
+// Customer Menu
+// ========================================================================
 
 // Customer CLI
-func customerCLI(db *sql.DB) {
+func customerCLI(db *sql.DB, cfg *config.Config) {
 	fmt.Println("Customer CLI")
 	fmt.Println("1. Place Order")
 	fmt.Println("2. View Order History")
@@ -51,8 +62,12 @@ func customerCLI(db *sql.DB) {
 	// Add more customer options here
 }
 
+// ========================================================================
+// Distributor Menu
+// ========================================================================
+
 // Distributor CLI
-func distributorCLI() {
+func distributorCLI(db *sql.DB, cfg *config.Config) {
 	fmt.Println("Distributor CLI")
 	fmt.Println("1. Add Products")
 	fmt.Println("2. View Orders")

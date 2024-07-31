@@ -7,15 +7,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"strconv"
-
+	"strings"
 )
-
-// -- Customer
-// -- Belanja
-// -- Login
-
 
 func Order(db *sql.DB) {
 	// -- pilih kategory
@@ -40,7 +34,7 @@ func Order(db *sql.DB) {
 	}
 
 	for i, c := range categories {
-		fmt.Printf("%d. %s, Description: %s\n", i + 1, c.Name, c.Description)
+		fmt.Printf("%d. %s, Description: %s\n", i+1, c.Name, c.Description)
 	}
 
 	length := len(categories)
@@ -56,8 +50,7 @@ func Order(db *sql.DB) {
 
 	rows.Close()
 
-	
-// -- pilih produk
+	// -- pilih produk
 	query = "SELECT p.name, p.description, p.price, d.name, p.size FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
 	rows, err = db.Query(query, choice)
 	if err != nil {
@@ -67,7 +60,7 @@ func Order(db *sql.DB) {
 	products := make([]*entity.Product, 0)
 	for rows.Next() {
 		item := new(entity.Product)
-		err := rows.Scan(&item.Name, &item.Description, &item.Price, &item.Distributor, &item.Size)
+		err := rows.Scan(&item.Name, &item.Description, &item.Price, &item.DistributorID, &item.Size)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -79,9 +72,9 @@ func Order(db *sql.DB) {
 
 	fmt.Println()
 	fmt.Println("=======================================================================================")
-	fmt.Printf("You selected the %s category. Below are the list of available products\n", categories[choice - 1].Name)
+	fmt.Printf("You selected the %s category. Below are the list of available products\n", categories[choice-1].Name)
 	for i, p := range products {
-		fmt.Printf("%d. %s\n", i + 1, p.Name)
+		fmt.Printf("%d. %s\n", i+1, p.Name)
 		fmt.Printf("Description: %s\n", p.Description)
 		fmt.Printf("Price: $%.2f\n", p.Price)
 		fmt.Printf("Size: %s\n", p.Size)
@@ -100,19 +93,14 @@ func Order(db *sql.DB) {
 	choiceInp, _ = reader.ReadString('\n')
 	choiceInp = strings.TrimSpace(choiceInp)
 	quantity, err := strconv.Atoi(choiceInp)
-	if err != nil || quantity < 1 || quantity > 100{
+	if err != nil || quantity < 1 || quantity > 100 {
 		fmt.Printf("Invalid input. Please enter a number between 1 to 100\n")
 		return
 	}
 	fmt.Println()
 	fmt.Println("=======================================================================================")
-	fmt.Printf("You selected %s with a quantity of %d. Please choose a delivery method\n", products[choice - 1].Name, quantity)
+	fmt.Printf("You selected %s with a quantity of %d. Please choose a delivery method\n", products[choice-1].Name, quantity)
 
 	rows.Close()
 
-// -- pilih delivery 
-// -- pilih pembayaran 
-// -- input kupon (optional)
-// -- bayar
-// -- receipt & shiping estimate
 }

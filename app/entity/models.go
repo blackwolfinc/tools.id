@@ -12,15 +12,25 @@ type User struct {
 }
 
 type Product struct {
-	Name string
-	Description string
-	Price float64
-	Distributor string
-	Stock int
-	Size string
+	ID            int
+	Name          string
+	Description   string
+	Price         float64
+	DistributorID int
+	CategoryID    int
+	Stock         int
+	Size          string
 }
 
 type Category struct {
-	Name string
+	ID          int
+	Name        string
 	Description string
+}
+
+type Distributor struct {
+	ID      int
+	Name    string
+	Address string
+	Phone   string
 }
