@@ -3,12 +3,11 @@ package handler
 import (
 	"app/cli"
 	"app/pkg/models"
+	"app/pkg/utils"
 	"database/sql"
 	"fmt"
 	"log"
 	"time"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(db *sql.DB) {
@@ -37,7 +36,8 @@ func Register(db *sql.DB) {
 		return
 	}
 
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	passwordHash, err := utils.HashPassword(password)
+
 	if err != nil {
 		log.Fatalf("Failed to hash password: %v", err)
 	}
@@ -68,7 +68,8 @@ func Login(db *sql.DB) {
 		log.Fatalf("Failed to query user: %v", err)
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	err = utils.CheckPasswordHash(user.Password, password)
+
 	if err != nil {
 		fmt.Println("Invalid email or password.")
 		return
