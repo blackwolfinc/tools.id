@@ -53,22 +53,22 @@ CREATE TABLE Orders (
     user_id INT, 
     delivery_id INT,
     coupon_id INT,
-    payment_id INT ,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (delivery_id) REFERENCES Delivery(delivery_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-    FOREIGN KEY (payment_id) REFERENCES Payments(payment_id)
+    FOREIGN KEY (coupon_id) REFERENCES Coupons(coupon_id)
 );
 
 CREATE TABLE Payments (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
     payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 CREATE TABLE OrderDetails (
