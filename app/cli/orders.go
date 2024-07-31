@@ -96,9 +96,17 @@ func Order(db *sql.DB) {
 		fmt.Printf("Invalid input. Please enter a number between 1 to %d\n", length)
 		return
 	}
+	fmt.Printf("Please enter a quantity: ")
+	choiceInp, _ = reader.ReadString('\n')
+	choiceInp = strings.TrimSpace(choiceInp)
+	quantity, err := strconv.Atoi(choiceInp)
+	if err != nil || quantity < 1 || quantity > 100{
+		fmt.Printf("Invalid input. Please enter a number between 1 to 100\n")
+		return
+	}
 	fmt.Println()
 	fmt.Println("=======================================================================================")
-	fmt.Printf("You selected %s. Please choose a delivery method\n", products[choice - 1].Name)
+	fmt.Printf("You selected %s with a quantity of %d. Please choose a delivery method\n", products[choice - 1].Name, quantity)
 
 	rows.Close()
 
@@ -106,34 +114,5 @@ func Order(db *sql.DB) {
 // -- pilih pembayaran 
 // -- input kupon (optional)
 // -- bayar
-// -- recipt & shiping estimate
-	
-	// fmt.Println("Select product")
-	// fmt.Println("Select product")
-	// fmt.Println("Select product")
-	// fmt.Println("Select product")
-	// fmt.Println("Select product")
-	// fmt.Println("2. Most Popular Game Report")
-	// fmt.Println("3. Total Revenue Per Game Report")
-	// fmt.Println("4. Player Count Per Game Report")
-	// fmt.Print("Enter the number of the report you want to generate: ")
-	// reader := bufio.NewReader(os.Stdin)
-	// choiceInp, _ := reader.ReadString('\n')
-	// choiceInp = strings.TrimSpace(choiceInp)
-	// choice, err := strconv.Atoi(choiceInp)
-	// if err != nil || choice < 1 || choice > 4 {
-	// 	fmt.Println("Invalid input. Please enter a number between 1 to 4")
-	// 	return
-	// }
-	// switch choice {
-	// case 1:
-	// 	handler.ShowTotalGameSalesReport(db)
-	// case 2:
-	// 	handler.ShowMostPopularGameReport(db)
-	// case 3:
-	// 	handler.ShowTotalRevenuePerGameReport(db)
-	// case 4:
-	// 	handler.ShowPlayerCountPerGameReport(db)
-	// }
-
+// -- receipt & shiping estimate
 }
