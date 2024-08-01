@@ -9,9 +9,6 @@ import (
 	"app/entity"
 )
 
-// coupon_code Ascending 1
-// discount_amount
-
 func ShowCoupons(cfg *config.Config) {
 	db, err := sql.Open("mysql", cfg.DSN())
 	if err != nil {
@@ -19,20 +16,19 @@ func ShowCoupons(cfg *config.Config) {
 		return
 	}
 
-	catQuery := "SELECT category_id, category_name, description FROM Categories"
+	catQuery := "SELECT coupon_id, coupon_code, discount_amount FROM Coupons"
 	catRows, err := db.Query(catQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	categories := make([]*entity.Category, 0)
+	coupons := make([]*entity.Coupons, 0)
 	for catRows.Next() {
-		cat := new(entity.Category)
-		err := catRows.Scan(&cat.ID, &cat.Name, &cat.Description)
+		cat := new(entity.Coupons)
+		err := catRows.Scan(&cat.ID, &cat.CouponCode, &cat.DiscountAmount)
 		if err != nil {
 			log.Fatal(err)
 		}
-		categories = append(categories, cat)
+		coupons = append(coupons, cat)
 	}
 	if err = catRows.Err(); err != nil {
 		log.Fatal(err)
@@ -41,8 +37,8 @@ func ShowCoupons(cfg *config.Config) {
 	defer catRows.Close()
 	defer db.Close()
 
-	for _, c := range categories {
-		fmt.Printf("%d. %s, Description: %s\n", c.ID, c.Name, c.Description)
+	for _, c := range coupons {
+		fmt.Printf("%d. code : %s, deduction: %s\n", c.ID, c.CouponCode, c.DiscountAmount)
 	}
 
 }
