@@ -36,8 +36,7 @@ func Login(cfg *config.Config, Password, Email string) []string {
 		return []string{"", ""}
 	}
 
-	fmt.Printf("Log in successful")
-	fmt.Printf("User Id: %s", strconv.Itoa(user.ID))
+	fmt.Printf("Log in successful\n")
 	return []string{user.Role, strconv.Itoa(user.ID)}
 }
 
