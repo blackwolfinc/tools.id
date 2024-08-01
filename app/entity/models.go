@@ -42,11 +42,12 @@ type Distributor struct {
 }
 
 type OrderDetail struct {
-	ID          int
-	OrderID     int
-	ProductID   int
-	ProductName string
-	Quantity    int
+	ID      int
+	OrderID int
+	ProductID int
+	ProductName   string
+	ProductSize string
+	Quantity int
 	TotalPrice  float64
 }
 

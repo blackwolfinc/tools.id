@@ -120,13 +120,6 @@ func Order(db *sql.DB, user_id int) {
 			fmt.Printf("Description: %s\n", p.Description)
 			fmt.Printf("Price: $%.2f\n", p.Price)
 			fmt.Printf("Size: %s\n", p.Size)
-			for i, s := range(sizes) {
-				if p.Size == s {
-					if i > maxSize {
-						maxSize = i
-					}
-				}
-			} 
 		}
 
 		length = len(products)
@@ -165,6 +158,7 @@ func Order(db *sql.DB, user_id int) {
 		order.OrderID = orderID
 		order.ProductID = products[choice-1].ID
 		order.ProductName = products[choice-1].Name
+		order.ProductSize = products[choice-1].Size
 		order.Quantity = quantity
 		order.TotalPrice = products[choice-1].Price * float64(quantity)
 
@@ -185,6 +179,13 @@ func Order(db *sql.DB, user_id int) {
 	for i, order := range orders {
 		sumTotalPrice += order.TotalPrice 
 		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
+		for i, s := range(sizes) {
+			if order.ProductSize == s {
+				if i > maxSize {
+					maxSize = i
+				}
+			}
+		} 
 	}
 
 	// checkout
