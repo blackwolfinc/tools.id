@@ -28,6 +28,12 @@ type Category struct {
 	Description string
 }
 
+type Coupons struct {
+	ID             int
+	CouponCode     string
+	DiscountAmount string
+}
+
 type Distributor struct {
 	ID      int
 	Name    string
@@ -46,9 +52,9 @@ type OrderDetail struct {
 }
 
 type Delivery struct {
-	ID int
-	Name string
-	Size string
-	Cost float64
+	ID           int
+	Name         string
+	Size         string
+	Cost         float64
 	DeliveryDays int
 }
