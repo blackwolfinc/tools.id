@@ -3,6 +3,7 @@ package cli
 import (
 	"app/config"
 	"app/handler"
+	"app/internal/delivery"
 	"fmt"
 	"os"
 )
@@ -11,6 +12,8 @@ func Delivery(cfg *config.Config) {
 	var choice int
 	fmt.Println("=======================================================================================")
 	fmt.Println("Delivery Menu")
+	fmt.Println("=======================================================================================")
+	delivery.ShowDelivery(cfg)
 	fmt.Println("=======================================================================================")
 	fmt.Println("1. Add Delivery")
 	fmt.Println("2. Edit Delivery")

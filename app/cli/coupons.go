@@ -3,6 +3,7 @@ package cli
 import (
 	"app/config"
 	"app/handler"
+	"app/internal/coupons"
 	"fmt"
 	"os"
 )
@@ -11,6 +12,8 @@ func Coupons(cfg *config.Config) {
 	var choice int
 	fmt.Println("=======================================================================================")
 	fmt.Println("Coupons Menu")
+	fmt.Println("=======================================================================================")
+	coupons.ShowCoupons(cfg)
 	fmt.Println("=======================================================================================")
 	fmt.Println("1. Add Coupons")
 	fmt.Println("2. Edit Coupons")
