@@ -255,6 +255,62 @@ func Order(db *sql.DB, user_id int) {
 	}
 	
 	sumTotalPrice += chosenDelivery.Cost
+
+	fmt.Println()
+	fmt.Println("=======================================================================================")
+	fmt.Println("Would you like to input a coupon? (y/n)")
+	inp, _ := reader.ReadString('\n')
+	inp = strings.TrimSpace(inp)
+	var validCode string
+	var couponID int
+	appliedDiscount := 0.0
+	valid := false
+	if inp == "y" {
+		fmt.Print("Enter a coupon code: ")
+		code, _ := reader.ReadString('\n')
+		code = strings.TrimSpace(code)
+		query = "SELECT coupon_id, coupon_code, discount_amount FROM Coupons"
+		couponRows, err := db.Query(query)
+		if err != nil {
+			log.Fatal(err)
+		}
+		
+		for couponRows.Next() {
+			err := couponRows.Scan(&couponID, &validCode, &appliedDiscount)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if validCode == code {
+				valid = true
+				break
+			}
+		}
+		if err = couponRows.Err(); err != nil {
+			log.Fatal(err)
+		}
+		defer couponRows.Close()
+	}
+
+	if valid {
+		fmt.Printf("Code valid. Discount applied (%d%%)", int(appliedDiscount))
+		query := "UPDATE Orders SET coupon_id = ? WHERE user_id = ? AND order_date = ?;"
+		_, err := db.Exec(query, couponID, user_id, formattedTime)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		fmt.Println("Your code is not valid. No discount applied")
+	}
+
+	
+
+	query = "UPDATE Orders SET total_amount = ? WHERE user_id = ? AND order_date = ?;"
+	_, err = db.Exec(query, sumTotalPrice*(100.0-appliedDiscount)/100.0, user_id, formattedTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+
 	payment_methods := []string{"Credit Card", "Virtual Account", "Cash on Delivery"}
 
 	fmt.Println("=======================================================================================")
@@ -275,6 +331,7 @@ func Order(db *sql.DB, user_id int) {
 		}
 		break
 	}
+	fmt.Println("=======================================================================================")
 	fmt.Println("Here is a summary of your order: ")
 	for i, order := range orders {
 		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
@@ -285,7 +342,12 @@ func Order(db *sql.DB, user_id int) {
 	formattedDate := newDate.Format("2006-01-02")
 	fmt.Printf("Estimated arrival: %s\n", formattedDate)
 	fmt.Printf("Subtotal: %.2f\n", sumTotalPrice)
+	if valid {
+		fmt.Printf("Coupon applied. Discount: %d%%\n", int(appliedDiscount))
+	}
+	fmt.Printf("Final payment amount: %.2f\n", sumTotalPrice*(100.0-appliedDiscount)/100.0)
 	fmt.Printf("Payment method chosen: %s\n", payment_methods[payChoice-1])
+	fmt.Println("=======================================================================================")
 	if payChoice == 1 {
 		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
 		_, err := db.Exec(query, "Credit Card", user_id, formattedTime)
@@ -342,10 +404,4 @@ func Order(db *sql.DB, user_id int) {
 			log.Fatal(err)
 		}
 	}
-
-
-	// fmt.Println()
-	// fmt.Println("=======================================================================================")
-	// fmt.Println("Would you like to input a coupon? (y/n)")
-	// fmt.Println("Enter a coupon id")
 }
