@@ -217,6 +217,8 @@ func Order(db *sql.DB, user_id int) {
 	fmt.Printf("Your maximum size item is %s. Below are the list of available choices of delivery:\n", sizes[maxSize])
 	length := 0
 	ind := 1
+	available_deliveries := []*entity.Delivery{}
+	chosenDelivery := new(entity.Delivery)
 	for _, d := range deliveries {
 		for i, s := range(sizes) {
 			if d.Size == s {
@@ -227,6 +229,7 @@ func Order(db *sql.DB, user_id int) {
 					fmt.Printf("Delivery Days: %d\n", d.DeliveryDays)
 					length++
 					ind++
+					available_deliveries = append(available_deliveries, d)
 				}
 			}
 		} 
@@ -241,9 +244,19 @@ func Order(db *sql.DB, user_id int) {
 			fmt.Println("Invalid input.")
 			continue
 		}
+		chosenDelivery = available_deliveries[choice - 1]
 		break
 	}
+
+	query = "UPDATE Orders SET delivery_id = ? WHERE user_id = ? AND order_date = ?;"
+	_, err = db.Exec(query, chosenDelivery.ID, user_id, formattedTime)
+	if err != nil {
+		log.Fatal(err)
+	}
 	
+	sumTotalPrice += chosenDelivery.Cost
+	payment_methods := []string{"Credit Card", "Virtual Account", "Cash on Delivery"}
+
 	fmt.Println("=======================================================================================")
 	fmt.Printf("Your total fee is %.2f\n", sumTotalPrice)
 	fmt.Println("Choose a payment method")
@@ -262,13 +275,24 @@ func Order(db *sql.DB, user_id int) {
 		}
 		break
 	}
+	fmt.Println("Here is a summary of your order: ")
+	for i, order := range orders {
+		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
+	}
+	fmt.Printf("Delivery name: %s\n", chosenDelivery.Name)
+	fmt.Printf("Delivery cost: %.2f\n", chosenDelivery.Cost)
+	newDate := now.Add(time.Duration(chosenDelivery.DeliveryDays) * 24 * time.Hour)
+	formattedDate := newDate.Format("2006-01-02")
+	fmt.Printf("Estimated arrival: %s\n", formattedDate)
+	fmt.Printf("Subtotal: %.2f\n", sumTotalPrice)
+	fmt.Printf("Payment method chosen: %s\n", payment_methods[payChoice-1])
 	if payChoice == 1 {
 		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
 		_, err := db.Exec(query, "Credit Card", user_id, formattedTime)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("You selected credit card. Proceed with payment (y/n) ")
+		fmt.Printf("Proceed with payment (y/n) ")
 		pay, _ := reader.ReadString('\n')
 		pay = strings.TrimSpace(pay)
 		if pay == "y" {
@@ -292,7 +316,7 @@ func Order(db *sql.DB, user_id int) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("You selected virtual account. Proceed with payment (y/n) ")
+		fmt.Printf("Proceed with payment (y/n) ")
 		pay, _ := reader.ReadString('\n')
 		pay = strings.TrimSpace(pay)
 		if pay == "y" {
@@ -311,7 +335,7 @@ func Order(db *sql.DB, user_id int) {
 			}
 		}
 	} else {
-		fmt.Println("You selected cash on delivery. Thank you for your order")
+		fmt.Println("Thank you for your order")
 		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
 		_, err := db.Exec(query, "Cash on Delivery", user_id, formattedTime)
 		if err != nil {
