@@ -3,6 +3,7 @@ package cli
 import (
 	"app/config"
 	"app/handler"
+	"app/internal/distributors"
 	"fmt"
 	"os"
 )
@@ -11,6 +12,8 @@ func Distributor(cfg *config.Config) {
 	var choice int
 	fmt.Println("=======================================================================================")
 	fmt.Println("Distributor Menu")
+	fmt.Println("=======================================================================================")
+	distributors.ShowDistributor(cfg)
 	fmt.Println("=======================================================================================")
 	fmt.Println("1. Add Distributor")
 	fmt.Println("2. Edit Distributor")
