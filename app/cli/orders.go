@@ -63,6 +63,9 @@ func Order(db *sql.DB, user_id int) {
 
 	orders := make([]*entity.OrderDetail, 0)
 
+	sizes := []string{"S", "M", "L"}
+	maxSize := 0
+
 	// cli
 	for {
 		fmt.Println("=======================================================================================")
@@ -87,6 +90,8 @@ func Order(db *sql.DB, user_id int) {
 		}
 
 		// list produk
+		
+		
 		productQuery := "SELECT p.product_id, p.name, p.description, p.price, d.distributor_id, p.size FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
 		productRows, err := db.Query(productQuery, choice)
 		if err != nil {
@@ -115,6 +120,13 @@ func Order(db *sql.DB, user_id int) {
 			fmt.Printf("Description: %s\n", p.Description)
 			fmt.Printf("Price: $%.2f\n", p.Price)
 			fmt.Printf("Size: %s\n", p.Size)
+			for i, s := range(sizes) {
+				if p.Size == s {
+					if i > maxSize {
+						maxSize = i
+					}
+				}
+			} 
 		}
 
 		length = len(products)
@@ -169,7 +181,9 @@ func Order(db *sql.DB, user_id int) {
 	fmt.Println()
 	fmt.Println("=======================================================================================")
 	fmt.Println("Here are a list of your orders")
+	sumTotalPrice := 0.0
 	for i, order := range orders {
+		sumTotalPrice += order.TotalPrice 
 		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
 	}
 
@@ -177,4 +191,137 @@ func Order(db *sql.DB, user_id int) {
 	fmt.Println()
 	fmt.Println("=======================================================================================")
 	fmt.Println("Choose a delivery method")
+	query = "SELECT delivery_id, name, size, cost, delivery_days FROM Delivery"
+	rows, err = db.Query(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	deliveries:= make([]*entity.Delivery, 0)
+	for rows.Next() {
+		item := new(entity.Delivery)
+		err := rows.Scan(&item.ID, &item.Name, &item.Size, &item.Cost, &item.DeliveryDays)
+		if err != nil {
+			log.Fatal(err)
+		}
+		deliveries = append(deliveries, item)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	defer rows.Close()
+	fmt.Println()
+	fmt.Println("=======================================================================================")
+	fmt.Printf("Your maximum size item is %s. Below are the list of available choices of delivery:\n", sizes[maxSize])
+	length := 0
+	ind := 1
+	for _, d := range deliveries {
+		for i, s := range(sizes) {
+			if d.Size == s {
+				if i >= maxSize {
+					fmt.Printf("%d. %s\n", ind, d.Name)
+					fmt.Printf("Size: %s\n", d.Size)
+					fmt.Printf("Cost: $%.2f\n", d.Cost)
+					fmt.Printf("Delivery Days: %d\n", d.DeliveryDays)
+					length++
+					ind++
+				}
+			}
+		} 
+	}
+
+	for {
+		fmt.Printf("Please enter a number between 1 to %d: ", length)
+		choiceInp, _ := reader.ReadString('\n')
+		choiceInp = strings.TrimSpace(choiceInp)
+		choice, err := strconv.Atoi(choiceInp)
+		if err != nil || choice < 1 || choice > length {
+			fmt.Println("Invalid input.")
+			continue
+		}
+		break
+	}
+	
+	fmt.Println("=======================================================================================")
+	fmt.Printf("Your total fee is %.2f\n", sumTotalPrice)
+	fmt.Println("Choose a payment method")
+	fmt.Println("1. Credit card")
+	fmt.Println("2. Virtual Account")
+	fmt.Println("3. Cash on Delivery")
+	var payChoice int
+	for {
+		fmt.Printf("Please enter a number between 1 to 3: ")
+		choiceInp, _ := reader.ReadString('\n')
+		choiceInp = strings.TrimSpace(choiceInp)
+		payChoice, err = strconv.Atoi(choiceInp)
+		if err != nil || payChoice < 1 || payChoice> 3 {
+			fmt.Printf("Invalid input.\n")
+			continue
+		}
+		break
+	}
+	if payChoice == 1 {
+		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
+		_, err := db.Exec(query, "Credit Card", user_id, formattedTime)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("You selected credit card. Proceed with payment (y/n) ")
+		pay, _ := reader.ReadString('\n')
+		pay = strings.TrimSpace(pay)
+		if pay == "y" {
+			fmt.Println("Thank you for your purchase!")
+			query := "UPDATE Orders SET payment_status = ? WHERE user_id = ? AND order_date = ?;"
+			_, err := db.Exec(query, "Completed", user_id, formattedTime)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			fmt.Println("Payment failed")
+			query := "UPDATE Orders SET payment_status = ? WHERE user_id = ? AND order_date = ?;"
+			_, err := db.Exec(query, "Failed", user_id, formattedTime)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	} else if payChoice == 2 {
+		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
+		_, err := db.Exec(query, "Virtual Account", user_id, formattedTime)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("You selected virtual account. Proceed with payment (y/n) ")
+		pay, _ := reader.ReadString('\n')
+		pay = strings.TrimSpace(pay)
+		if pay == "y" {
+			fmt.Println("Thank you for your purchase!")
+			query := "UPDATE Orders SET payment_status = ? WHERE user_id = ? AND order_date = ?;"
+			_, err := db.Exec(query, "Completed", user_id, formattedTime)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			fmt.Println("Payment failed")
+			query := "UPDATE Orders SET payment_status = ? WHERE user_id = ? AND order_date = ?;"
+			_, err := db.Exec(query, "Failed", user_id, formattedTime)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	} else {
+		fmt.Println("You selected cash on delivery. Thank you for your order")
+		query := "UPDATE Orders SET payment_method = ? WHERE user_id = ? AND order_date = ?;"
+		_, err := db.Exec(query, "Cash on Delivery", user_id, formattedTime)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+
+	// fmt.Println()
+	// fmt.Println("=======================================================================================")
+	// fmt.Println("Would you like to input a coupon? (y/n)")
+	// fmt.Println("Enter a coupon id")
 }

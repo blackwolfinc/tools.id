@@ -43,3 +43,11 @@ type OrderDetail struct {
 	Quantity int
 	TotalPrice  float64
 }
+
+type Delivery struct {
+	ID int
+	Name string
+	Size string
+	Cost float64
+	DeliveryDays int
+}
