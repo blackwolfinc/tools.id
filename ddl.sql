@@ -42,7 +42,7 @@ CREATE TABLE Users (
 -- estimated_date 1 = 1 hari
 CREATE TABLE Delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255)
+    name VARCHAR(255),
     size ENUM('S', 'M', 'L') NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,
     delivery_days INT NOT NULL
@@ -111,6 +111,7 @@ CREATE TABLE Orders (
     coupon_id INT,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Processing', 'Shipped', 'Delivered', 'Cancelled') NOT NULL DEFAULT 'Processing',
+    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account'),
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL DEFAULT 'Pending',
     total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
@@ -131,12 +132,12 @@ CREATE TABLE OrderDetails (
 );
 
 
--- Payment Integration (ACC)
-CREATE TABLE Payments (
-    payment_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    payment_method ENUM('Credit Card', 'Cash', 'Virtual Account') NOT NULL,
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-);
+-- -- Payment Integration (ACC)
+-- CREATE TABLE Payments (
+--     payment_id INT AUTO_INCREMENT PRIMARY KEY,
+--     order_id INT,
+--     
+--     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     amount DECIMAL(10, 2) NOT NULL,
+--     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+-- );

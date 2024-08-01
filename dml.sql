@@ -50,7 +50,7 @@ INSERT INTO Delivery (name, size, cost, delivery_days) VALUES
 ('J&T', 'L', 200.00, 3),
 ('JNE', 'S', 150.00, 1),
 ('JNE', 'M', 200.00, 2),
-('JNE', 'L', 250.00, 3),
+('JNE', 'L', 250.00, 3);
 
 -- Discount/Coupon Management (ACC)
 INSERT INTO Coupons (coupon_code, discount_amount) VALUES
@@ -85,44 +85,44 @@ INSERT INTO Products (name, description, price, category_id, distributor_id, sto
 ('Industrial Robot', 'Robot system used for manufacturing.', 50000.00, 8, 15, 20, 'L'),
 ('PLC Controller', 'Programmable Logic Controller used for industrial automation.', 2000.00, 8, 16, 100, 'M');
 
--- Order Management (Transaksi) (ACC)
--- Assuming Users, Delivery, Coupons tables already have records
-INSERT INTO Orders (user_id, delivery_id, coupon_id, status, payment_status, total_amount) VALUES
-(1, 1, 1, 'Processing', 'Pending', 100.00),
-(2, 2, 2, 'Shipped', 'Completed', 150.00),
-(3, 3, 3, 'Delivered', 'Failed', 200.00),
-(4, 4, 4, 'Cancelled', 'Pending', 250.00),
-(5, 5, 5, 'Processing', 'Completed', 300.00),
-(6, 6, 6, 'Shipped', 'Failed', 350.00),
-(7, 7, 7, 'Delivered', 'Pending', 400.00),
-(8, 8, 8, 'Cancelled', 'Completed', 450.00),
-(9, 9, 9, 'Processing', 'Failed', 500.00),
-(10, 10, 10, 'Shipped', 'Pending', 550.00);
+-- -- Order Management (Transaksi) (ACC)
+-- -- Assuming Users, Delivery, Coupons tables already have records
+-- INSERT INTO Orders (user_id, delivery_id, coupon_id, status, payment_status, total_amount) VALUES
+-- (1, 1, 1, 'Processing', 'Pending', 100.00),
+-- (2, 2, 2, 'Shipped', 'Completed', 150.00),
+-- (3, 3, 3, 'Delivered', 'Failed', 200.00),
+-- (4, 4, 4, 'Cancelled', 'Pending', 250.00),
+-- (5, 5, 5, 'Processing', 'Completed', 300.00),
+-- (6, 6, 6, 'Shipped', 'Failed', 350.00),
+-- (7, 7, 7, 'Delivered', 'Pending', 400.00),
+-- (8, 8, 8, 'Cancelled', 'Completed', 450.00),
+-- (9, 9, 9, 'Processing', 'Failed', 500.00),
+-- (10, 10, 10, 'Shipped', 'Pending', 550.00);
 
--- Payment Integration (ACC)
--- Assuming Orders table already has 10 records with order_id from 1 to 10
-INSERT INTO Payments (order_id, payment_method, amount) VALUES
-(1, 'Credit Card', 100.00),
-(2, 'Cash', 150.00),
-(3, 'Virtual Account', 200.00),
-(4, 'Credit Card', 250.00),
-(5, 'Cash', 300.00),
-(6, 'Virtual Account', 350.00),
-(7, 'Credit Card', 400.00),
-(8, 'Cash', 450.00),
-(9, 'Virtual Account', 500.00),
-(10, 'Credit Card', 550.00);
+-- -- Payment Integration (ACC)
+-- -- Assuming Orders table already has 10 records with order_id from 1 to 10
+-- INSERT INTO Payments (order_id, payment_method, amount) VALUES
+-- (1, 'Credit Card', 100.00),
+-- (2, 'Cash', 150.00),
+-- (3, 'Virtual Account', 200.00),
+-- (4, 'Credit Card', 250.00),
+-- (5, 'Cash', 300.00),
+-- (6, 'Virtual Account', 350.00),
+-- (7, 'Credit Card', 400.00),
+-- (8, 'Cash', 450.00),
+-- (9, 'Virtual Account', 500.00),
+-- (10, 'Credit Card', 550.00);
 
--- Detail Order (Transaksi) (ACC)
--- Assuming Products and Orders tables already have records
-INSERT INTO OrderDetails (order_id, product_id, quantity, total_price) VALUES
-(1, 1, 1, 100.00),
-(2, 2, 2, 150.00),
-(3, 3, 3, 200.00),
-(4, 4, 4, 250.00),
-(5, 5, 5, 300.00),
-(6, 6, 6, 350.00),
-(7, 7, 7, 400.00),
-(8, 8, 8, 450.00),
-(9, 9, 9, 500.00),
-(10, 10, 10, 550.00);
+-- -- Detail Order (Transaksi) (ACC)
+-- -- Assuming Products and Orders tables already have records
+-- INSERT INTO OrderDetails (order_id, product_id, quantity, total_price) VALUES
+-- (1, 1, 1, 100.00),
+-- (2, 2, 2, 150.00),
+-- (3, 3, 3, 200.00),
+-- (4, 4, 4, 250.00),
+-- (5, 5, 5, 300.00),
+-- (6, 6, 6, 350.00),
+-- (7, 7, 7, 400.00),
+-- (8, 8, 8, 450.00),
+-- (9, 9, 9, 500.00),
+-- (10, 10, 10, 550.00);
