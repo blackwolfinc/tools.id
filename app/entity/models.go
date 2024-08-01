@@ -40,6 +40,7 @@ type OrderDetail struct {
 	OrderID int
 	ProductID int
 	ProductName   string
+	ProductSize string
 	Quantity int
 	TotalPrice  float64
 }
