@@ -52,7 +52,7 @@ func AddCategory(cfg *config.Config, name, description string) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO categories (category_name, description) VALUES (?, ?)", name, description)
+	_, err = db.Exec("INSERT INTO Categories (category_name, description) VALUES (?, ?)", name, description)
 	if err != nil {
 		fmt.Println("Error adding category:", err)
 	} else {
@@ -68,7 +68,7 @@ func EditCategory(cfg *config.Config, id int, name, description string) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("UPDATE categories SET category_name=?, description=? WHERE id=?", name, description, id)
+	_, err = db.Exec("UPDATE Categories SET category_name=?, description=? WHERE category_id=?", name, description, id)
 	if err != nil {
 		fmt.Println("Error editing category:", err)
 	} else {
@@ -84,7 +84,7 @@ func DeleteCategory(cfg *config.Config, id int) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM categories WHERE id=?", id)
+	_, err = db.Exec("DELETE FROM Categories WHERE category_id=?", id)
 	if err != nil {
 		fmt.Println("Error deleting category:", err)
 	} else {
