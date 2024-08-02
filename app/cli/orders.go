@@ -71,7 +71,7 @@ func Order(db *sql.DB, user_id int) {
 		fmt.Println("=======================================================================================")
 		fmt.Println("Please select a category:")
 		for i, c := range categories {
-			fmt.Printf("%d. %s, Description: %s\n", i+1, c.Name, c.Description)
+			fmt.Printf("%d. %s\n", i+1, c.Name)
 		}
 
 		length := len(categories)
@@ -114,12 +114,11 @@ func Order(db *sql.DB, user_id int) {
 		defer productRows.Close()
 		fmt.Println()
 		fmt.Println("=======================================================================================")
-		fmt.Printf("You selected the %s category. Below are the list of available products\n", categories[choice-1].Name)
+		fmt.Printf("You selected the %s category. Category description: %s\n", categories[choice-1].Name, categories[choice-1].Description)
+		fmt.Println("Below is a list of available products:")
 		for i, p := range products {
-			fmt.Printf("%d. %s\n", i+1, p.Name)
-			fmt.Printf("Description: %s\n", p.Description)
-			fmt.Printf("Price: $%.2f\n", p.Price)
-			fmt.Printf("Size: %s\n", p.Size)
+			fmt.Printf("%d. %s, Price: $%.2f, Size: %s\n", i+1, p.Name, p.Price, p.Size)
+			fmt.Printf("   Description: %s\n", p.Description)
 		}
 
 		length = len(products)
@@ -336,6 +335,7 @@ func Order(db *sql.DB, user_id int) {
 	fmt.Println("Here is a summary of your order: ")
 	for i, order := range orders {
 		fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
+		fmt.Println("---------------------------------------------------------------------------------------")
 	}
 	fmt.Printf("Delivery name: %s\n", chosenDelivery.Name)
 	fmt.Printf("Delivery cost: %.2f\n", chosenDelivery.Cost)
