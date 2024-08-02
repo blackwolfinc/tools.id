@@ -2,6 +2,7 @@ package cli
 
 import (
 	"app/config"
+	"app/handler"
 	"bufio"
 	"database/sql"
 	"fmt"
@@ -75,12 +76,14 @@ func customerCLI(db *sql.DB, cfg *config.Config, userId int) {
 // ========================================================================
 
 // Distributor CLI
-func distributorCLI(db *sql.DB, cfg *config.Config) {
+func distributorCLI(db *sql.DB, cfg *config.Config, userId int) {
 	fmt.Println("=======================================================================================")
 	fmt.Println("Distributor Menu")
 	fmt.Println("=======================================================================================")
-	fmt.Println("1. Add Products")
-	fmt.Println("2. View Orders")
+	fmt.Println("1. Add/View/Edit/Delete Products")
+	fmt.Println("2. View Order Products")
+	fmt.Println("3. Report")
+	fmt.Println("0. Exit")
 	fmt.Println("=======================================================================================")
 
 	var choice int
@@ -88,8 +91,11 @@ func distributorCLI(db *sql.DB, cfg *config.Config) {
 
 	switch choice {
 	case 1:
-		Product(cfg)
+		Product(cfg, userId)
 	case 2:
+		handler.ViewOrderProducts(cfg, userId)
+	case 3:
+		ReportProducts(cfg, userId)
 	case 0:
 		os.Exit(0)
 	default:

@@ -3,6 +3,7 @@ package handler
 import (
 	"app/config"
 	"app/internal/auth"
+	"app/internal/distributors"
 	"app/pkg/utils"
 	"database/sql"
 	"fmt"
@@ -11,6 +12,8 @@ import (
 
 func Register(db *sql.DB, cfg *config.Config) {
 	var email, password, address, role string
+	var distributorID int // Declare distributorID
+
 	fmt.Print("Enter email: ")
 	fmt.Scanln(&email)
 	fmt.Print("Enter password: ")
@@ -30,17 +33,30 @@ func Register(db *sql.DB, cfg *config.Config) {
 		role = "Customer"
 	case 2:
 		role = "Distributor"
+
+		// Show Distributor
+		distributors.ViewDistributor(cfg)
+		// Prompt for distributor ID if the role is Distributor
+
+		fmt.Print("Enter distributor ID: ")
+		fmt.Scanln(&distributorID)
+
 	default:
 		fmt.Println("Invalid role choice")
 		return
 	}
 
 	passwordHash, err := utils.HashPassword(password)
-
 	if err != nil {
 		log.Fatalf("Failed to hash password: %v", err)
 	}
-	auth.Register(cfg, email, passwordHash, address, role)
+
+	// Include distributorID in the registration process if applicable
+	if role == "Distributor" {
+		auth.RegisterDistributor(cfg, email, passwordHash, address, role, distributorID)
+	} else {
+		auth.Register(cfg, email, passwordHash, address, role)
+	}
 }
 
 func Login(db *sql.DB, cfg *config.Config) []string {
