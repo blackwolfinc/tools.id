@@ -13,7 +13,6 @@ import (
 )
 
 func Order(db *sql.DB, user_id int) {
-	fmt.Println(user_id)
 	reader := bufio.NewReader(os.Stdin)
 	now := time.Now()
 

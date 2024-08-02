@@ -56,13 +56,13 @@ func adminCLI(db *sql.DB, cfg *config.Config) {
 func customerCLI(db *sql.DB, cfg *config.Config, userId int) {
 	fmt.Println("Customer CLI")
 	fmt.Println("1. Place Order")
-	fmt.Println("2. View Order History")
+	// fmt.Println("2. View Order History")
 	reader := bufio.NewReader(os.Stdin)
 	choiceInp, _ := reader.ReadString('\n')
 	choiceInp = strings.TrimSpace(choiceInp)
 	choice, err := strconv.Atoi(choiceInp)
-	if err != nil || choice < 1 || choice > 2 {
-		fmt.Printf("Invalid input. Please enter a number between 1 to 2\n")
+	if err != nil || choice != 1 {
+		fmt.Printf("Invalid input.\n")
 		return
 	}
 	if choice == 1 {
