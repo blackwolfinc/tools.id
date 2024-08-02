@@ -55,10 +55,30 @@ func Register(cfg *config.Config, email, passwordHash, address, role string) {
 	}
 
 	fmt.Println("Sign up successful. Please log in.")
+
+	//Login(cfg, passwordHash, email)
+}
+
+func RegisterDistributor(cfg *config.Config, email, passwordHash, address, role string, distributorID int) {
+	// Open database connection
+	db, err := sql.Open("mysql", cfg.DSN())
 	if err != nil {
-		fmt.Println("Invalid email or password.")
+		fmt.Println("Error connecting to database:", err)
 		return
 	}
+	defer db.Close()
 
-	Login(cfg, passwordHash, email)
+	// Insert user into the Users table with distributor ID
+	_, err = db.Exec(
+		"INSERT INTO Users (email, password_hash, address, role, distributor_id, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+		email, passwordHash, address, role, distributorID, time.Now(),
+	)
+	if err != nil {
+		log.Fatalf("Failed to insert distributor: %v", err)
+	}
+
+	fmt.Println("Distributor sign up successful. Please log in.")
+
+	// Call the login function
+	//Login(cfg, passwordHash, email)
 }

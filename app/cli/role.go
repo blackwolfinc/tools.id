@@ -14,7 +14,7 @@ func HandleUserRole(role string, userID int, db *sql.DB, cfg *config.Config) {
 	case "Customer":
 		customerCLI(db, cfg, userID)
 	case "Distributor":
-		distributorCLI(db, cfg)
+		distributorCLI(db, cfg, userID)
 	default:
 		fmt.Println("Unknown role")
 	}

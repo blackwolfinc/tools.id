@@ -35,8 +35,11 @@ CREATE TABLE Users (
     password_hash VARCHAR(255) NOT NULL,
     address TEXT NOT NULL,
     role ENUM('Admin', 'Customer', 'Distributor') NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    distributor_id INT,  -- New column for distributor ID
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (distributor_id) REFERENCES Distributors(distributor_id)
 );
+
 
 -- Delivery (ACC)
 -- estimated_date 1 = 1 hari

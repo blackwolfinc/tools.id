@@ -38,7 +38,8 @@ func ShowCategory(cfg *config.Config) {
 	defer db.Close()
 
 	for _, c := range categories {
-		fmt.Printf("%d. %s, Description: %s\n", c.ID, c.Name, c.Description)
+		//fmt.Printf("%d. Category : %s, Description : %s\n", c.ID, c.Name, c.Description)
+		fmt.Printf("%d. Category : %s\n", c.ID, c.Name)
 	}
 
 }
