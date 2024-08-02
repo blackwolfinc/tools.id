@@ -45,7 +45,7 @@ func AddProduct(cfg *config.Config, name, description, size string, price float6
 
 	// Updated SQL query to include stock and size
 	_, err = db.Exec(
-		"INSERT INTO products (name, description, size, price, stock, category_id, distributor_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		"INSERT INTO Products (name, description, size, price, stock, category_id, distributor_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		name, description, size, price, stock, categoryID, distributorID,
 	)
 	if err != nil {
@@ -72,7 +72,7 @@ func EditProduct(cfg *config.Config, id int, name, description, size string, pri
 	defer db.Close()
 
 	// Updated SQL query to include size and stock
-	result, err := db.Exec("UPDATE products SET name=?, description=?, size=?, price=?, stock=?, category_id=? WHERE product_id = ? AND distributor_id = ?", name, description, size, price, stock, categoryID, id, distributorID)
+	result, err := db.Exec("UPDATE Products SET name=?, description=?, size=?, price=?, stock=?, category_id=? WHERE product_id = ? AND distributor_id = ?", name, description, size, price, stock, categoryID, id, distributorID)
 	if err != nil {
 		fmt.Println("Error editing product:", err)
 		return
@@ -107,7 +107,7 @@ func DeleteProduct(cfg *config.Config, id int, distributorID int) {
 	}
 	defer db.Close()
 
-	query := "DELETE FROM products WHERE product_id = ? AND distributor_id = ?"
+	query := "DELETE FROM Products WHERE product_id = ? AND distributor_id = ?"
 
 	result, err := db.Exec(query, id, distributorID)
 	if err != nil {
@@ -135,24 +135,24 @@ func ViewProduct(cfg *config.Config, distributorID int, headerReport string) {
 
 	rows, err := db.Query(`
 		SELECT 
-			products.product_id,
-			categories.category_name AS category_name,
-			products.name, 
-			products.description,
-			products.size,
-			products.stock,
-			products.price
+			Products.product_id,
+			Categories.category_name AS category_name,
+			Products.name, 
+			Products.description,
+			Products.size,
+			Products.stock,
+			Products.price
 		FROM 
-			products 
+			Products 
 		LEFT JOIN 
-			categories 
+			Categories 
 		ON 
-			products.category_id = categories.category_id 
+			Products.category_id = Categories.category_id 
 		WHERE 
-			products.distributor_id = ?
+			Products.distributor_id = ?
 	`, distributorID)
 	if err != nil {
-		fmt.Println("Error querying products:", err)
+		fmt.Println("Error querying Products:", err)
 		return
 	}
 	defer rows.Close()

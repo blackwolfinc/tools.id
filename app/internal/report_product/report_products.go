@@ -383,19 +383,19 @@ func ViewSmallestProducts(cfg *config.Config, distributorID int) {
 
 	rows, err := db.Query(`
 		SELECT 
-			products.product_id,
-			categories.category_name AS category_name,
-			products.name, 
-			products.description,
-			products.size,
-			products.stock,
-			products.price
+			Products.product_id,
+			Categories.category_name AS category_name,
+			Products.name, 
+			Products.description,
+			Products.size,
+			Products.stock,
+			Products.price
 		FROM 
-			products 
+			Products 
 		LEFT JOIN 
-			categories 
+			Categories 
 		ON 
-			products.category_id = categories.category_id  
+			Products.category_id = Categories.category_id  
 		WHERE 
 			distributor_id = ? 
 		ORDER BY 
@@ -403,7 +403,7 @@ func ViewSmallestProducts(cfg *config.Config, distributorID int) {
 		LIMIT 5
 	`, distributorID)
 	if err != nil {
-		fmt.Println("Error querying smallest products:", err)
+		fmt.Println("Error querying smallest Products:", err)
 		return
 	}
 	defer rows.Close()
