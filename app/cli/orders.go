@@ -91,7 +91,7 @@ func Order(db *sql.DB, user_id int) {
 		// list produk
 		
 		
-		productQuery := "SELECT p.product_id, p.name, p.description, p.price, d.distributor_id, p.size FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
+		productQuery := "SELECT p.product_id, p.name, p.description, p.price, d.distributor_id, p.size, p.stock FROM Products p, Distributors d, Categories c WHERE p.distributor_id = d.distributor_id AND c.category_id = p.category_id AND c.category_id = ?"
 		productRows, err := db.Query(productQuery, choice)
 		if err != nil {
 			log.Fatal(err)
@@ -100,7 +100,7 @@ func Order(db *sql.DB, user_id int) {
 		products := make([]*entity.Product, 0)
 		for productRows.Next() {
 			item := new(entity.Product)
-			err := productRows.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.DistributorID, &item.Size)
+			err := productRows.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.DistributorID, &item.Size, &item.Stock)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -116,7 +116,7 @@ func Order(db *sql.DB, user_id int) {
 		fmt.Printf("You selected the %s category. Category description: %s\n", categories[choice-1].Name, categories[choice-1].Description)
 		fmt.Println("Below is a list of available products:")
 		for i, p := range products {
-			fmt.Printf("%d. %s, Price: $%.2f, Size: %s\n", i+1, p.Name, p.Price, p.Size)
+			fmt.Printf("%d. %s, Price: $%.2f, Size: %s, Stock available: %d\n", i+1, p.Name, p.Price, p.Size, p.Stock)
 			fmt.Printf("   Description: %s\n", p.Description)
 		}
 
@@ -139,8 +139,8 @@ func Order(db *sql.DB, user_id int) {
 			choiceInp, _ := reader.ReadString('\n')
 			choiceInp = strings.TrimSpace(choiceInp)
 			quantity, err = strconv.Atoi(choiceInp)
-			if err != nil || quantity < 1 || quantity > 10 {
-				fmt.Printf("Invalid input. Please enter a number between 1 to 10\n")
+			if err != nil || quantity < 1 || quantity > products[choice-1].Stock {
+				fmt.Printf("Invalid input. Please enter a number between 1 to %d\n", products[choice-1].Stock)
 				continue
 			}
 			break
@@ -364,6 +364,15 @@ func Order(db *sql.DB, user_id int) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			for i, order := range orders {
+				fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
+				fmt.Println("---------------------------------------------------------------------------------------")
+				query := "UPDATE Products SET stock = stock - ? WHERE name = ?;"
+				_, err := db.Exec(query, order.Quantity, order.ProductName)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
 		} else {
 			fmt.Println("Payment failed")
 			query := "UPDATE Orders SET payment_status = ? WHERE user_id = ? AND order_date = ?;"
@@ -387,6 +396,15 @@ func Order(db *sql.DB, user_id int) {
 			_, err := db.Exec(query, "Completed", user_id, formattedTime)
 			if err != nil {
 				log.Fatal(err)
+			}
+			for i, order := range orders {
+				fmt.Printf("%d. %s, quantity: %d, total price = %.2f\n", i+1, order.ProductName, order.Quantity, order.TotalPrice)
+				fmt.Println("---------------------------------------------------------------------------------------")
+				query := "UPDATE Products SET stock = stock - ? WHERE name = ?;"
+				_, err := db.Exec(query, order.Quantity, order.ProductName)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		} else {
 			fmt.Println("Payment failed")
