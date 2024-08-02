@@ -52,7 +52,7 @@ func AddDistributor(cfg *config.Config, name, address, phone string) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO distributors (name, address, phone) VALUES (?, ?, ?)", name, address, phone)
+	_, err = db.Exec("INSERT INTO Distributors (name, address, phone_number) VALUES (?, ?, ?)", name, address, phone)
 	if err != nil {
 		fmt.Println("Error adding distributor:", err)
 	} else {
@@ -68,7 +68,7 @@ func EditDistributor(cfg *config.Config, id int, name, address, phone string) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("UPDATE distributors SET name=?, address=?, phone=? WHERE id=?", name, address, phone, id)
+	_, err = db.Exec("UPDATE Distributors SET name=?, address=?, phone_number=? WHERE distributor_id=?", name, address, phone, id)
 	if err != nil {
 		fmt.Println("Error editing distributor:", err)
 	} else {
@@ -84,7 +84,7 @@ func DeleteDistributor(cfg *config.Config, id int) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM distributors WHERE id=?", id)
+	_, err = db.Exec("DELETE FROM Distributors WHERE distributor_id=?", id)
 	if err != nil {
 		fmt.Println("Error deleting distributor:", err)
 	} else {
